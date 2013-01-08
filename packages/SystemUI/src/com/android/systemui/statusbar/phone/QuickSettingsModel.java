@@ -197,6 +197,7 @@ private final CurrentUserTracker mUserTracker;
 private final NextAlarmObserver mNextAlarmObserver;
 private final BugreportObserver mBugreportObserver;
 private final BrightnessObserver mBrightnessObserver;
+private NfcAdapter mNfcAdapter;
 
 private QuickSettingsTileView mUserTile;
 private RefreshCallback mUserCallback;
@@ -333,7 +334,6 @@ private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 
 @Override
 public void onReceive(Context context, Intent intent) {
-NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(context);
 if (NfcAdapter.ACTION_ADAPTER_STATE_CHANGED.equals(intent.getAction())) {
 refreshNFCTile();
 }
@@ -1035,13 +1035,13 @@ on2gChanged();
 void addNFCTile(QuickSettingsTileView view, RefreshCallback cb) {
 mNFCTile = view;
 mNFCCallback = cb;
+refreshNFCTile();
 }
 
 void onNFCChanged() {
-NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
 boolean enabled = false;
-if (adapter != null) {
-enabled = adapter.isEnabled();
+if (mNfcAdapter != null) {
+enabled = mNfcAdapter.isEnabled();
 }
 mNFCState.enabled = enabled;
 mNFCState.iconId = enabled
@@ -1243,5 +1243,8 @@ onRotationLockChanged();
 onBrightnessLevelChanged();
 onNextAlarmChanged();
 onBugreportChanged();
+}
+public void setNfcAdapter(NfcAdapter adapter) {
+mNfcAdapter = adapter;
 }
 }

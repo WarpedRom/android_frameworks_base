@@ -160,6 +160,7 @@ class QuickSettings {
     public static final String FAST_CHARGE_FILE = "force_fast_charge";
 
     private int mWifiApState = WifiManager.WIFI_AP_STATE_DISABLED;
+	private int mWifiState = WifiManager.WIFI_STATE_DISABLED;
 
     private int mDataState = -1;
 
@@ -174,6 +175,7 @@ class QuickSettings {
     private WifiDisplayStatus mWifiDisplayStatus;
     private WifiManager wifiManager;
     private ConnectivityManager connManager;
+	private NfcAdapter mNfcAdapter;
     private LocationManager locationManager;
     private PhoneStatusBar mStatusBarService;
     private BluetoothState mBluetoothState;
@@ -313,15 +315,16 @@ class QuickSettings {
         updateWifiDisplayStatus();
         updateResources();
 
-        if (getCustomUserTiles().contains(SIGNAL_TOGGLE))
+        ArrayList<String> userTiles = getCustomUserTiles();
+		if (userTiles.contains(SIGNAL_TOGGLE) || userTiles.contains(WIFI_TOGGLE))
             networkController.addNetworkSignalChangedCallback(mModel);
-        if (getCustomUserTiles().contains(BLUETOOTH_TOGGLE))
+        if (userTiles.contains(BLUETOOTH_TOGGLE))
             bluetoothController.addStateChangedCallback(mModel);
-        if (getCustomUserTiles().contains(BATTERY_TOGGLE))
+        if (userTiles.contains(BATTERY_TOGGLE))
             batteryController.addStateChangedCallback(mModel);
-        if (getCustomUserTiles().contains(GPS_TOGGLE))
+        if (userTiles.contains(GPS_TOGGLE))
             locationController.addStateChangedCallback(mModel);
-        if (getCustomUserTiles().contains(ROTATE_TOGGLE))
+        if (userTiles.contains(ROTATE_TOGGLE))
             RotationPolicy.registerRotationPolicyListener(mContext, mRotationPolicyListener,
                     UserHandle.USER_ALL);
     }
@@ -589,7 +592,7 @@ class QuickSettings {
                     @Override
                     public boolean onLongClick(View v) {
                         Intent intent = new Intent("android.intent.action.MAIN");
-                        intent.setComponent(ComponentName.unflattenFromString("com.aokp.romcontrol/.ROMControlActivity"));
+                        intent.setComponent(ComponentName.unflattenFromString("com.android.settings.warped/.WarpedSettings"));
                         intent.addCategory("android.intent.category.LAUNCHER");
                         startSettingsActivity(intent);
                         return true;
@@ -605,38 +608,39 @@ class QuickSettings {
                 });
                 mDynamicSpannedTiles.add(quick);
                 break;
-            case WIFI_TILE:
-                quick = (QuickSettingsTileView)
-                        inflater.inflate(R.layout.quick_settings_tile, parent, false);
-                quick.setContent(R.layout.quick_settings_tile_wifi, inflater);
-                quick.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        wifiManager.setWifiEnabled(wifiManager.isWifiEnabled() ? false : true);
-                    }
-                });
-                quick.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        startSettingsActivity(android.provider.Settings.ACTION_WIFI_SETTINGS);
-                        return true;
-                    }
-                });
-                mModel.addWifiTile(quick, new QuickSettingsModel.RefreshCallback() {
-                    @Override
-                    public void refreshView(QuickSettingsTileView view, State state) {
-                        WifiState wifiState = (WifiState) state;
-                        TextView tv = (TextView) view.findViewById(R.id.wifi_textview);
-                        tv.setCompoundDrawablesWithIntrinsicBounds(0, wifiState.iconId, 0, 0);
-                        tv.setText(wifiState.label);
-                        tv.setTextSize(1, mTileTextSize);
-                        view.setContentDescription(mContext.getString(
-                                R.string.accessibility_quick_settings_wifi,
-                                wifiState.signalContentDescription,
-                                (wifiState.connected) ? wifiState.label : ""));
-                    }
-                });
-                break;
+
+			case WIFI_TILE:
+				quick = (QuickSettingsTileView)
+					inflater.inflate(R.layout.quick_settings_tile, parent, false);
+				quick.setContent(R.layout.quick_settings_tile_wifi, inflater);
+				quick.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					wifiManager.setWifiEnabled(!wifiManager.isWifiEnabled());
+				}
+			});
+			quick.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					startSettingsActivity(android.provider.Settings.ACTION_WIFI_SETTINGS);
+				return true;
+				}
+			});
+			mModel.addWifiTile(quick, new QuickSettingsModel.RefreshCallback() {
+				@Override
+				public void refreshView(QuickSettingsTileView view, State state) {
+					WifiState wifiState = (WifiState) state;
+					TextView tv = (TextView) view.findViewById(R.id.wifi_textview);
+					tv.setCompoundDrawablesWithIntrinsicBounds(0, wifiState.iconId, 0, 0);
+					tv.setText(wifiState.label);
+					tv.setTextSize(1, mTileTextSize);
+					view.setContentDescription(mContext.getString(
+						R.string.accessibility_quick_settings_wifi,
+						wifiState.signalContentDescription,
+						(wifiState.connected) ? wifiState.label : ""));
+				}
+			});
+			break;
 
             case TWOG_TILE:
                 quick = (QuickSettingsTileView)
@@ -646,7 +650,8 @@ class QuickSettings {
                     @Override
                     public void onClick(View v) {
                         try {
-                            mDataState = Settings.Global.getInt(mContext.getContentResolver(), Settings.Global.PREFERRED_NETWORK_MODE);
+                            mDataState = Settings.Global.getInt(mContext.getContentResolver(), 
+								Settings.Global.PREFERRED_NETWORK_MODE);
                         } catch (SettingNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -661,7 +666,7 @@ class QuickSettings {
                 quick.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        startSettingsActivity(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+                        startSettingsActivity(android.provider.Settings.ACTION_DATA_ROAMING_SETTINGS);
                         return true;
                     }
                 });
@@ -833,11 +838,12 @@ class QuickSettings {
                     @Override
                     public void onClick(View v) {
                         mWifiApState = wifiManager.getWifiApState();
-                        if (mWifiApState == WifiManager.WIFI_AP_STATE_DISABLED || mWifiApState == WifiManager.WIFI_AP_STATE_DISABLING) {
-                            changeWifiState(true);
-                        } else {
-                            changeWifiState(false);
-                        }
+						if (mWifiApState == WifiManager.WIFI_AP_STATE_DISABLED
+								|| mWifiApState == WifiManager.WIFI_AP_STATE_DISABLING) {
+							changeWifiApState(true);
+						} else {
+							changeWifiApState(false);
+						}
                         mHandler.postDelayed(delayedRefresh, 1000);  
                     }
                 });
@@ -924,17 +930,17 @@ class QuickSettings {
                 quick.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(mContext);
                         boolean enabled = false;
-                        if (mNfcAdapter != null) {
-                            enabled = mNfcAdapter.isEnabled();
+                        if (mNfcAdapter == null) {
+                            mNfcAdapter = NfcAdapter.getDefaultAdapter();
+							mModel.setNfcAdapter(mNfcAdapter);
                         }
+						enabled = mNfcAdapter.isEnabled();
                         if (enabled) {
                             mNfcAdapter.disable();
                         } else {
                             mNfcAdapter.enable();
                         }
-                        mHandler.postDelayed(delayedRefresh, 1000);  
                     }
                 });
                 quick.setOnLongClickListener(new View.OnLongClickListener() {
@@ -1502,7 +1508,7 @@ class QuickSettings {
 
     }
 
-    private void changeWifiState(final boolean desiredState) {
+    private void changeWifiApState(final boolean desiredState) {
         if (wifiManager == null) {
             Log.d("WifiButton", "No wifiManager.");
             return;
@@ -1521,6 +1527,26 @@ class QuickSettings {
             }
         });
     }
+
+	private void changeWifiState(final boolean desiredState) {
+		if (wifiManager == null) {
+			return;
+		}
+
+		AsyncTask.execute(new Runnable() {
+		public void run() {
+			int wifiApState = wifiManager.getWifiApState();
+			if (desiredState
+				&& ((wifiApState == WifiManager.WIFI_AP_STATE_ENABLING)
+					|| (wifiApState == WifiManager.WIFI_AP_STATE_ENABLED))) {
+				wifiManager.setWifiApEnabled(null, false);
+			}
+
+			wifiManager.setWifiEnabled(desiredState);
+			return;
+			}
+		});
+	}
 
     public boolean updateUsbState() {
         String[] mUsbRegexs = connManager.getTetherableUsbRegexs();
@@ -1541,8 +1567,7 @@ class QuickSettings {
     final Runnable delayedRefresh = new Runnable () {
         public void run() {
             mModel.refreshWifiTetherTile();
-            mModel.refreshUSBTetherTile();
-            mModel.refreshNFCTile();
+			mModel.refreshUSBTetherTile();
             mModel.refreshTorchTile();
         }
     };
