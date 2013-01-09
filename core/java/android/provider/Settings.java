@@ -2470,9 +2470,31 @@ public final class Settings {
 		 */
 		public static final String NAV_BUTTONS_HEIGHT = "nav_buttons_height";
 		
+		/**
+         * enabled and order of quick toggles
+         * 
+         * @hide
+         */
 		public static final String QUICK_TOGGLES = "quick_toggles";
 		
+		/**
+         * number of tiles per row in quick settings
+         *
+         * @hide
+         */
 		public static final String QUICK_TOGGLES_PER_ROW = "quick_toggles_per_row";
+		
+		/**
+         * Setting to allow % on lockscreen always showing.
+         * @hide
+         */
+        public static final String LOCKSCREEN_BATTERY = "lockscreen_battery";
+		
+		/**
+         * Whether to use keyguard or homescreen widgets
+         * @hide
+         */
+        public static final String LOCKSCREEN_ALL_WIDGETS = "lockscreen_all_widgets";
 		
 		/**
 		 * Key to store Torch state.
