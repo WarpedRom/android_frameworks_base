@@ -590,13 +590,14 @@ class QuickSettings {
                 });
                 quick.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
-                        Intent intent = new Intent("android.intent.action.MAIN");
-                        intent.setComponent(ComponentName.unflattenFromString("com.android.settings.warped/.WarpedSettings"));
-                        intent.addCategory("android.intent.category.LAUNCHER");
-                        startSettingsActivity(intent);
-                        return true;
-                    }
+					public boolean onLongClick(View v) {
+					Intent intent = new Intent();
+					intent.setComponent(new ComponentName(
+					"com.android.settings",
+					"com.android.settings.warped.WarpedSettingsActivity"));
+					startSettingsActivity(intent);
+					return true;
+					}
                 });
                 mModel.addSettingsTile(quick, new QuickSettingsModel.RefreshCallback() {
                     @Override
