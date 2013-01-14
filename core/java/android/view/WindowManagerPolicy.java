@@ -610,6 +610,7 @@ public interface WindowManagerPolicy {
      * {@link #getNonDecorDisplayHeight(int, int, int)}; it may be smaller than
      * that to account for more transient decoration like a status bar.
      */
+    public int getConfigDisplayHeight(int fullWidth, int fullHeight, int rotation);
 
     /**
      * Return whether the given window should forcibly hide everything
