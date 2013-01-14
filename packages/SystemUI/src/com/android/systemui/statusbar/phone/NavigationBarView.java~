@@ -100,6 +100,9 @@ public class NavigationBarView extends LinearLayout {
     private DeadZone mDeadZone;
     private Context mContext;
 
+    private float mNavigationBarAlpha;
+    public static final float KEYGUARD_ALPHA = 0.44f;
+
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
     final static boolean WORKAROUND_INVALID_LAYOUT = true;
     final static int MSG_CHECK_INVALID_LAYOUT = 8686;
@@ -204,6 +207,11 @@ public class NavigationBarView extends LinearLayout {
                         updateColor();
                     }
                 });
+	Drawable bg = mContext.getResources().getDrawable(R.drawable.nav_bar_bg);
+        if(bg instanceof ColorDrawable) {
+            setBackground(new NavigationBarBackgroundDrawable(((ColorDrawable) bg).getColor()));
+        }
+        setBackgroundAlpha(mNavigationBarAlpha);
     }
 
     public void notifyScreenOn(boolean screenOn) {
@@ -259,6 +267,21 @@ public class NavigationBarView extends LinearLayout {
             (0 != (hints & StatusBarManager.NAVIGATION_HINT_HOME_NOP)) ? 0.5f : 1.0f);
         getRecentsButton().setAlpha(
             (0 != (hints & StatusBarManager.NAVIGATION_HINT_RECENT_NOP)) ? 0.5f : 1.0f);
+	updateKeyguardAlpha();
+    }
+
+    private boolean isKeyguardEnabled() {
+        return ((mDisabledFlags & View.STATUS_BAR_DISABLE_HOME) != 0) && !((mDisabledFlags & View.STATUS_BAR_DISABLE_SEARCH) != 0);
+    }
+
+    private void updateKeyguardAlpha() {
+        if(!isKeyguardEnabled() && (mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0) {
+            // keyboard up, always darken it
+            setBackgroundAlpha(1);
+        } else {
+            // if the user set alpha is below what the keygaurd alpha, match the keyguard alpha and be pretty
+            setBackgroundAlpha(isKeyguardEnabled() && mNavigationBarAlpha < KEYGUARD_ALPHA ? KEYGUARD_ALPHA : mNavigationBarAlpha);
+        }
     }
 
 	public void setIconStyle(final boolean style) {
@@ -451,6 +474,7 @@ public class NavigationBarView extends LinearLayout {
         final boolean disableBack = ((disabledFlags & View.STATUS_BAR_DISABLE_BACK) != 0)
                 && ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) == 0);
         final boolean disableSearch = ((disabledFlags & View.STATUS_BAR_DISABLE_SEARCH) != 0);
+	final boolean keygaurdProbablyEnabled = isKeyguardEnabled();
 
         if (SLIPPERY_WHEN_DISABLED) {
             setSlippery(disableHome && disableRecent && disableBack && disableSearch);
@@ -470,7 +494,8 @@ public class NavigationBarView extends LinearLayout {
         getHomeButton()   .setVisibility(disableHome       ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent     ? View.INVISIBLE : View.VISIBLE);
 
-        getSearchLight().setVisibility((disableHome && !disableSearch) ? View.VISIBLE : View.GONE);
+        getSearchLight().setVisibility(keygaurdProbablyEnabled ? View.VISIBLE : View.GONE);
+	updateKeyguardAlpha();
 	
     }
 
@@ -644,6 +669,51 @@ public class NavigationBarView extends LinearLayout {
     }
     */
 
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_ALPHA), false, this);
+
+	 updateSettings();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+
+    private void setBackgroundAlpha(float alpha) {
+        Drawable bg = getBackground();
+        if(bg == null) return;
+
+        int a = (int) (alpha * 255);
+        if(bg instanceof NavigationBarBackgroundDrawable) {
+            int bgColor = ((ColorDrawable)bg).getColor();
+            int r = Color.red(bgColor);
+            int g = Color.green(bgColor);
+            int b = Color.blue(bgColor);
+            ((NavigationBarBackgroundDrawable) bg).setBgColor(Color.argb(a,r,g,b));
+        } else {
+             // probably a picture
+        }
+        bg.setAlpha(a);
+    }
+
+    protected void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+
+	mNavigationBarAlpha = Settings.System.getFloat(resolver,
+                Settings.System.NAVIGATION_BAR_ALPHA, new Float(mContext.getResources().getInteger(R.integer.navigation_bar_transparency) / 255));
+    }
+        
+
     private String getResourceName(int resId) {
         if (resId != 0) {
             final android.content.res.Resources res = mContext.getResources();
@@ -733,4 +803,34 @@ public class NavigationBarView extends LinearLayout {
                 );
         pw.println("    }");
 	}
+
+	private class NavigationBarBackgroundDrawable extends ColorDrawable {
+        int mBgColor;
+
+        public NavigationBarBackgroundDrawable(int bgColor) {
+            mBgColor = bgColor;
+        }
+
+        public void setBgColor(int color) {
+            mBgColor = color;
+        }
+
+        @Override
+        public void draw(Canvas canvas) {
+            canvas.drawColor(mBgColor, PorterDuff.Mode.SRC);
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+        }
+
+        @Override
+        public void setColorFilter(ColorFilter cf) {
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.TRANSLUCENT;
+        }
+    }
 }

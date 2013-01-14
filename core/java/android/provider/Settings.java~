@@ -2318,7 +2318,7 @@ public final class Settings {
          */
         public static final String VIBRATE_NOTIF_EXPAND = "vibrate_notif_expand";
 
-	public static final String NAVIGATION_BAR_ALPHA = "navigation_bar_alpha";
+	public static final String NAV_BAR_TRANSPARENCY = "nav_bar_transparency";
 		
 		/**
 		 * Style of Battery

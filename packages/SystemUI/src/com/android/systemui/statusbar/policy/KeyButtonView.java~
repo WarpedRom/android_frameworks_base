@@ -221,7 +221,7 @@ public class KeyButtonView extends ImageView {
                         mGlowAlpha = BUTTON_QUIESCENT_ALPHA;
                     setDrawingAlpha(BUTTON_QUIESCENT_ALPHA);
                     as.playTogether(
-                        ObjectAnimator.ofFloat(this, "glowAlpha", 1f),
+                        ObjectAnimator.ofFloat(this, "glowAlpha", 0f),
                         ObjectAnimator.ofFloat(this, "glowScale", GLOW_MAX_SCALE_FACTOR)
                     );
                     as.setDuration(durationSpeedOff);
