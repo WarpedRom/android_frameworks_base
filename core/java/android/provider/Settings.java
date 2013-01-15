@@ -2344,8 +2344,21 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_MUSIC_CONTROLS = "volume_music_controls";
+
+        /**
+	 * Custom string for package;color|pacakge;color
+	 * so we can change custom colors per app
+	 * @hide
+	 */
+        public static final String LED_CUSTOM_VALUES = "led_custom_values";
+
+        /* What brightness to use for the notificaion LED
+	 *
+	 * @hide
+	 */
+        public static final String LED_BRIGHTNESS = "led_brightness";	
 		
-		/**
+	/**
          * Whether to show the battery bar
          * @hide
          */
@@ -2821,6 +2834,12 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
+
+	public static final String NOTIFICATION_LIGHT_ON = "notification_light_on";
+	
+	public static final String NOTIFICATION_LIGHT_OFF = "notification_light_off";
+
+	public static final String NOTIFICATION_LIGHT_COLOR = "notification_light_color";
     }
 
     /**
@@ -3334,6 +3353,13 @@ public final class Settings {
          * @hide
          */
         public static final String BUGREPORT_IN_POWER_MENU = "bugreport_in_power_menu";
+
+	 /**
+	  * Whether to blink the LED when screen is on
+	  *
+	  * @hide
+	  */ 
+        public static final String LED_SCREEN_ON = "led_screen_on";
 
         /**
          * @deprecated Use {@link android.provider.Settings.Global#ADB_ENABLED} instead
@@ -4676,6 +4702,7 @@ public final class Settings {
         * 0 = only allow installing from Google Play
         */
        public static final String INSTALL_NON_MARKET_APPS = "install_non_market_apps";
+	
 
        /**
         * Whether mobile data connections are allowed by the user.  See
