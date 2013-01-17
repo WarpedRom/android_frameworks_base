@@ -2390,55 +2390,97 @@ public final class Settings {
          *
          * @hide
          */
-		public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt";
+	public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt";
 
         /**
-		 * AM/PM Style for clock options
-		 * 0 - Normal AM/PM
-		 * 1 - Small AM/PM
-		 * 2 - No AM/PM
-		 * @hide
-		 */
-		public static final String STATUSBAR_CLOCK_AM_PM_STYLE = "statusbar_clock_am_pm_style";
+	 * AM/PM Style for clock options
+	 * 0 - Normal AM/PM
+	 * 1 - Small AM/PM
+	 * 2 - No AM/PM
+	 * @hide
+	 */
+	public static final String STATUSBAR_CLOCK_AM_PM_STYLE = "statusbar_clock_am_pm_style";
 		
-		/**
-		 * Style of clock
-		 * 0 - Hide Clock
-		 * 1 - Right Clock
-		 * 2 - Center Clock
-		 * @hide
-		 */
-		public static final String STATUSBAR_CLOCK_STYLE = "statusbar_clock_style";
+	/**
+	 * Style of clock
+	 * 0 - Hide Clock
+	 * 1 - Right Clock
+	 * 2 - Center Clock
+	 * @hide
+	 */
+	public static final String STATUSBAR_CLOCK_STYLE = "statusbar_clock_style";
 		
-		/**
-		 *  Setting for clock color
-		 * @hide
-		 */
-		public static final String STATUSBAR_CLOCK_COLOR = "statusbar_clock_color";
+	/**
+	 *  Setting for clock color
+	 * @hide
+	 */
+	public static final String STATUSBAR_CLOCK_COLOR = "statusbar_clock_color";
 		
-		/**
-		 * Show weekday
-		 * 0 - NO
-		 * 1 - Small
-		 * 2 - Normal
-		 * @hide
-		 */
-		public static final String STATUSBAR_CLOCK_WEEKDAY = "statusbar_clock_weekday";
+	/**
+	 * Show weekday
+	 * 0 - NO
+	 * 1 - Small
+	 * 2 - Normal
+	 * @hide
+	 */
+	public static final String STATUSBAR_CLOCK_WEEKDAY = "statusbar_clock_weekday";
 		
-		/**
-		 * Show pending notification count
-		 * @hide
-		 */
-		public static final String STATUSBAR_NOTIF_COUNT = "status_bar_notif_count";
+	/**
+	 * Show pending notification count
+	 * @hide
+	 */
+	public static final String STATUSBAR_NOTIF_COUNT = "status_bar_notif_count";
 		
-		/**
-		 * Hold text for carrier label. An empty string 
-		 * will bring the default back.
-		 * @hide
-		 */
-		public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
-		
-		/**
+	/**
+	 * Hold text for carrier label. An empty string 
+	 * will bring the default back.
+	 * @hide
+	 */
+	public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
+
+	 /**
+	 * Whether to enable quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
+
+        /**
+	 * Sets when quiet hours starts. This is stored in minutes from the start of the day.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_START = "quiet_hours_start";
+
+        /**
+	 * Sets when quiet hours end. This is stored in minutes from the start of the day.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_END = "quiet_hours_end";
+
+        /**
+	 * Whether to remove the sound from outgoing notifications during quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_NOTIFICATIONS = "quiet_hours_notifications";
+
+        /**
+	 * Whether to mute phone ringtones during quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
+
+        /**
+	 * Whether to disable vibrations during quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_STILL = "quiet_hours_still";
+
+        /**
+	 * Whether to attempt to dim the LED color during quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
+
+	/**
          * Clock Actions 0 = single, 1 = long, 2 = double click
          *
          * @hide
