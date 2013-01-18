@@ -92,7 +92,8 @@ public class NavigationBarView extends LinearLayout {
     public final static int PLAYSTATION_STYLE = 6;
     public final static int IPHONE_BLACK_STYLE = 7;
     public final static int IPHONE_WHITE_STYLE = 8;
-    public final static int TEXT_STYLE = 9;
+    public final static int BAKED_STYLE = 9;
+    public final static int TEXT_STYLE = 10;
 
     private Drawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon;
     
@@ -415,6 +416,22 @@ public class NavigationBarView extends LinearLayout {
 			((ImageView) getHomeButton())
 			.setImageResource(mVertical ? R.drawable.ic_sysbar_home_white
 			: R.drawable.ic_sysbar_home_white);
+			localStyle = true;
+		break;
+
+		case BAKED_STYLE:
+			((ImageView) getMenuButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_menu_baked
+			: R.drawable.ic_sysbar_menu_baked);
+			((ImageView) getBackButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_back_baked
+			: R.drawable.ic_sysbar_back_baked);
+			((ImageView) getRecentsButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_recent_baked
+			: R.drawable.ic_sysbar_recent_baked);
+			((ImageView) getHomeButton())
+			.setImageResource(mVertical ? R.drawable.ic_sysbar_home_baked
+			: R.drawable.ic_sysbar_home_baked);
 			localStyle = true;
 		break;
 
