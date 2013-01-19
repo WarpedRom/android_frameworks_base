@@ -2550,6 +2550,10 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_BATTERY = "lockscreen_battery";
+
+	public static final String LOCKSCREEN_AUTO_ROTATE = "lockscreen_auto_rotate";
+
+	public static final String LOCKSCREEN_CUSTOM_TEXT_COLOR = "lockscreen_custom_text_color";
 		
 		/**
          * Whether to use keyguard or homescreen widgets
