@@ -2368,7 +2368,33 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_BATTERY_BAR_COLOR = "statusbar_battery_bar_color";
-		
+	
+	/**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_TEXT_COLOR = "statusbar_battery_text_color";
+
+	public static final int STATUSBAR_BATTERY_TEXT_COLOR_DEF = 0xFF33B5E5;
+
+	/**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_TEXT_PLUGGED_COLOR = "statusbar_battery_text_plugged_color";
+
+	public static final int STATUSBAR_BATTERY_TEXT_COLOR_PLUGGED_DEF = 0xFF99CC00;
+
+	/**
+         * @hide
+         */
+        public static final String STATUSBAR_BATTERY_TEXT_LOW_COLOR = "statusbar_battery_text_low_color";
+
+	public static final int STATUSBAR_BATTERY_TEXT_COLOR_LOW_DEF = 0xFFFF4444;
+
+	/**
+         * @hide
+         */
+        public static final String STATUSBAR_BACKGROUND_COLOR = "statusbar_background_color";
+
         /**
          * @hide
          */

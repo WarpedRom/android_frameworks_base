@@ -174,7 +174,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     StatusBarWindowView mStatusBarWindow;
     PhoneStatusBarView mStatusBarView;
 	
-	private AokpTarget mAokpTarget;
+    private AokpTarget mAokpTarget;
 
     int mPixelFormat;
     Object mQueueLock = new Object();
@@ -220,7 +220,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     View mClearButton;
     ImageView mSettingsButton, mNotificationButton;
 	
-	private int shortClick = 0;
+    private int shortClick = 0;
     private int longClick = 1;
     private int doubleClick = 2;
     private int doubleClickCounter = 0;
@@ -370,7 +370,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     protected PhoneStatusBarView makeStatusBarView() {
         final Context context = mContext;
 
-		mAokpTarget = new AokpTarget(mContext);
+	mAokpTarget = new AokpTarget(mContext);
 
         Resources res = context.getResources();
 
@@ -453,7 +453,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         mNotificationIcons = (IconMerger)mStatusBarView.findViewById(R.id.notificationIcons);
         mNotificationIcons.setOverflowIndicator(mMoreIcon);
         mStatusBarContents = (LinearLayout)mStatusBarView.findViewById(R.id.status_bar_contents);
-		mCenterClockLayout = (LinearLayout)mStatusBarView.findViewById(R.id.center_clock_layout);
+	mCenterClockLayout = (LinearLayout)mStatusBarView.findViewById(R.id.center_clock_layout);
         mTickerView = mStatusBarView.findViewById(R.id.ticker);
 
         mPile = (NotificationRowLayout)mStatusBarWindow.findViewById(R.id.latestItems);
