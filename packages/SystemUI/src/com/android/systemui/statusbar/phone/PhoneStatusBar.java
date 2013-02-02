@@ -37,7 +37,9 @@ import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
@@ -54,6 +56,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -166,6 +169,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     int mNaturalBarHeight = -1;
     int mIconSize = -1;
     int mIconHPadding = -1;
+    private View mStatusBarBackground;
     Display mDisplay;
     Point mCurrentDisplaySize = new Point();
 
@@ -455,6 +459,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         mStatusBarContents = (LinearLayout)mStatusBarView.findViewById(R.id.status_bar_contents);
 	mCenterClockLayout = (LinearLayout)mStatusBarView.findViewById(R.id.center_clock_layout);
         mTickerView = mStatusBarView.findViewById(R.id.ticker);
+	mStatusBarBackground = (View)mStatusBarView.findViewById(R.id.status_bar);
 
         mPile = (NotificationRowLayout)mStatusBarWindow.findViewById(R.id.latestItems);
         mPile.setLayoutTransitionsEnabled(false);
@@ -2553,7 +2558,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 			resolver.registerContentObserver(Settings.System.getUriFor(
 					 Settings.System.NOTIFICATION_CLOCK[longClick]), false, this);
 			resolver.registerContentObserver(Settings.System.getUriFor(
-					 Settings.System.NOTIFICATION_CLOCK[doubleClick]), false, this);		
+					 Settings.System.NOTIFICATION_CLOCK[doubleClick]), false, this);
+			resolver.registerContentObserver(Settings.System.getUriFor(
+					 Settings.System.STATUSBAR_BACKGROUND_COLOR), false, this);		
 			updateSettings();
 
 		}
@@ -2566,6 +2573,10 @@ public class PhoneStatusBar extends BaseStatusBar {
 	}
 	protected void updateSettings() {
 		ContentResolver cr = mContext.getContentResolver();
+
+		int color = Settings.System.getInt(cr, Settings.System.STATUSBAR_BACKGROUND_COLOR,
+                0xFF000000);
+		mStatusBarBackground.setBackgroundColor(color);
 
 		mClockActions[shortClick] = Settings.System.getString(cr,
 			Settings.System.NOTIFICATION_CLOCK[shortClick]);
