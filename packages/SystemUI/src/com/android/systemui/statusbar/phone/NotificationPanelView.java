@@ -17,9 +17,14 @@
 package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.MotionEvent;
@@ -29,6 +34,9 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.GestureRecorder;
 
 public class NotificationPanelView extends PanelView {
+    
+    private static final float STATUS_BAR_SETTINGS_FLIP_PERCENTAGE_RIGHT = 0.15f;
+    private static final float STATUS_BAR_SETTINGS_FLIP_PERCENTAGE_LEFT = 0.85f;
 
     Drawable mHandleBar;
     float mHandleBarHeight;
@@ -36,6 +44,11 @@ public class NotificationPanelView extends PanelView {
     int mFingers;
     PhoneStatusBar mStatusBar;
     boolean mOkToFlip;
+    boolean mFastToggleEnabled;
+    int mFastTogglePos;
+    ContentObserver mEnableObserver;
+    ContentObserver mChangeSideObserver;
+    Handler mHandler = new Handler();
 
     public NotificationPanelView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,7 +67,39 @@ public class NotificationPanelView extends PanelView {
         mHandleBarHeight = resources.getDimension(R.dimen.close_handle_height);
         mHandleView = findViewById(R.id.handle);
 
-        setContentDescription(resources.getString(R.string.accessibility_desc_notification_shade));
+        setContentDescription(resources.getString(
+                R.string.accessibility_desc_notification_shade));
+
+        final ContentResolver resolver = getContext().getContentResolver();
+        mEnableObserver = new ContentObserver(mHandler) {
+            @Override
+            public void onChange(boolean selfChange) {
+                mFastToggleEnabled = Settings.System.getBoolean(resolver,
+                        Settings.System.FAST_TOGGLE, false);
+            }
+        };
+
+        mChangeSideObserver = new ContentObserver(mHandler) {
+            @Override
+            public void onChange(boolean selfChange) {
+                mFastTogglePos = Settings.System.getInt(resolver,
+                        Settings.System.CHOOSE_FASTTOGGLE_SIDE, 1);
+            }
+        };
+
+        // Initialization
+        mFastToggleEnabled = Settings.System.getBoolean(resolver,
+                Settings.System.FAST_TOGGLE, false);
+        mFastTogglePos = Settings.System.getInt(resolver,
+                Settings.System.CHOOSE_FASTTOGGLE_SIDE, 1);
+
+        resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.FAST_TOGGLE),
+                true, mEnableObserver);
+
+        resolver.registerContentObserver(
+                Settings.System.getUriFor(Settings.System.CHOOSE_FASTTOGGLE_SIDE),
+                true, mChangeSideObserver);
     }
 
     @Override
@@ -89,13 +134,34 @@ public class NotificationPanelView extends PanelView {
         canvas.translate(0, -off);
     }
 
-    @Override
+     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (PhoneStatusBar.SETTINGS_DRAG_SHORTCUT && mStatusBar.mHasFlipSettings) {
+        if (PhoneStatusBar.SETTINGS_DRAG_SHORTCUT
+                && mStatusBar.mHasFlipSettings) {
+            boolean shouldFlip = false;
+
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     mOkToFlip = getExpandedHeight() == 0;
+                    if (mFastTogglePos == 1) {
+                        if ((event.getX(0) > getWidth()
+                                * (1.0f - STATUS_BAR_SETTINGS_FLIP_PERCENTAGE_RIGHT)
+                                && mFastToggleEnabled)
+                            || (mStatusBar.skipToSettingsPanel())
+                                && !mFastToggleEnabled) {
+                            shouldFlip = true;
+                        }
+                    } else if (mFastTogglePos == 2) {
+                        if ((event.getX(0) < getWidth()
+                                * (1.0f - STATUS_BAR_SETTINGS_FLIP_PERCENTAGE_LEFT)
+                                && mFastToggleEnabled)
+                            || (mStatusBar.skipToSettingsPanel())
+                                && !mFastToggleEnabled) {
+                            shouldFlip = true;
+                        }
+                    }
                     break;
+
                 case MotionEvent.ACTION_POINTER_DOWN:
                     if (mOkToFlip) {
                         float miny = event.getY(0);
@@ -106,15 +172,18 @@ public class NotificationPanelView extends PanelView {
                             if (y > maxy) maxy = y;
                         }
                         if (maxy - miny < mHandleBarHeight) {
-                            if (getMeasuredHeight() < mHandleBarHeight) {
-                                mStatusBar.switchToSettings();
-                            } else {
-                                mStatusBar.flipToSettings();
-                            }
-                            mOkToFlip = false;
+                            shouldFlip = true;
                         }
                     }
                     break;
+            }
+            if(mOkToFlip && shouldFlip) {
+                if (getMeasuredHeight() < mHandleBarHeight) {
+                    mStatusBar.switchToSettings();
+                } else {
+                    mStatusBar.flipToSettings();
+                }
+                mOkToFlip = false;
             }
         }
         return mHandleView.dispatchTouchEvent(event);

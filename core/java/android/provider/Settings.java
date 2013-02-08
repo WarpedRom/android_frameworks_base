@@ -2550,26 +2550,40 @@ public final class Settings {
 				"navigation_bar_glow_duration_on"
 		};
 		
-		/**
-		 * Change height of the navigation bar
-		 *
-		 * @hide
-		 */
-		public static final String NAV_BUTTONS_HEIGHT = "nav_buttons_height";
+	/**
+	 * Change height of the navigation bar
+	 *
+	 * @hide
+	 */
+	public static final String NAV_BUTTONS_HEIGHT = "nav_buttons_height";
 		
-		/**
+	/**
          * enabled and order of quick toggles
          * 
          * @hide
          */
-		public static final String QUICK_TOGGLES = "quick_toggles";
+	public static final String QUICK_TOGGLES = "quick_toggles";
 		
-		/**
+	/**
          * number of tiles per row in quick settings
          *
          * @hide
          */
-		public static final String QUICK_TOGGLES_PER_ROW = "quick_toggles_per_row";
+	public static final String QUICK_TOGGLES_PER_ROW = "quick_toggles_per_row";
+
+	 /**
+	  * enable and disable fast toggle in settings
+	  *
+	  * @hide
+	  */
+        public static final String FAST_TOGGLE = "fast_toggle";
+
+        /**
+	  * enable and disable fast toggle in settings
+	  *
+	  * @hide
+	  */
+        public static final String CHOOSE_FASTTOGGLE_SIDE = "choose_fasttoggle_side";
 		
 		/**
          * Setting to allow % on lockscreen always showing.
@@ -2592,6 +2606,8 @@ public final class Settings {
 		 * @hide 
 		 */
         public static final String TORCH_STATE = "torch_state";
+
+	public static final String RECENT_KILL_ALL_BUTTON = "recent_kill_all_button";
 		
 		/**
 		 * Whether the UI is in tablet UI
