@@ -2345,6 +2345,8 @@ public final class Settings {
          */
         public static final String VOLUME_MUSIC_CONTROLS = "volume_music_controls";
 
+	public static final String RAM_USAGE_BAR = "ram_usage_bar";
+
         /**
 	 * Custom string for package;color|pacakge;color
 	 * so we can change custom colors per app
