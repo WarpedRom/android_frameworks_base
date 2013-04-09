@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2006-2008 The Android Open Source Project
- * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +19,8 @@ package com.android.server.am;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 import com.android.internal.R;
-import com.android.internal.app.ThemeUtils;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.ProcessStats;
-import com.android.internal.widget.LockPatternUtils;
 import com.android.server.AttributeCache;
 import com.android.server.IntentResolver;
 import com.android.server.ProcessMap;
@@ -89,7 +86,6 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
 import android.net.Proxy;
 import android.net.ProxyProperties;
@@ -163,7 +159,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-import dalvik.system.Zygote;
 
 public final class ActivityManagerService extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -671,7 +666,6 @@ public final class ActivityManagerService extends ActivityManagerNative
     boolean mLaunchWarningShown = false;
 
     Context mContext;
-	Context mUiContext;
 
     int mFactoryTest;
 
@@ -941,7 +935,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         return;
                     }
                     if (mShowDialogs && !mSleeping && !mShuttingDown) {
-                        Dialog d = new AppErrorDialog(getUiContext(),
+                        Dialog d = new AppErrorDialog(mContext,
                                 ActivityManagerService.this, res, proc);
                         d.show();
                         proc.crashDialog = d;
@@ -976,7 +970,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                     if (mShowDialogs) {
                         Dialog d = new AppNotRespondingDialog(ActivityManagerService.this,
-                                getUiContext(), proc, (ActivityRecord)data.get("activity"),
+                                mContext, proc, (ActivityRecord)data.get("activity"),
                                 msg.arg1 != 0);
                         d.show();
                         proc.anrDialog = d;
@@ -1002,7 +996,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     }
                     AppErrorResult res = (AppErrorResult) data.get("result");
                     if (mShowDialogs && !mSleeping && !mShuttingDown) {
-                        Dialog d = new StrictModeViolationDialog(getUiContext(),
+                        Dialog d = new StrictModeViolationDialog(mContext,
                                 ActivityManagerService.this, res, proc);
                         d.show();
                         proc.crashDialog = d;
@@ -1016,7 +1010,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             } break;
             case SHOW_FACTORY_ERROR_MSG: {
                 Dialog d = new FactoryErrorDialog(
-                    getUiContext(), msg.getData().getCharSequence("msg"));
+                    mContext, msg.getData().getCharSequence("msg"));
                 d.show();
                 ensureBootCompleted();
             } break;
@@ -1036,7 +1030,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         if (!app.waitedForDebugger) {
                             Dialog d = new AppWaitingForDebuggerDialog(
                                     ActivityManagerService.this,
-                                    getUiContext(), app);
+                                    mContext, app);
                             app.waitDialog = d;
                             app.waitedForDebugger = true;
                             d.show();
@@ -1118,7 +1112,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Log.e(TAG, title + ": " + text);
                 if (mShowDialogs) {
                     // XXX This is a temporary dialog, no need to localize.
-                    AlertDialog d = new BaseErrorDialog(getUiContext());
+                    AlertDialog d = new BaseErrorDialog(mContext);
                     d.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
                     d.setCancelable(false);
                     d.setTitle(title);
@@ -1189,7 +1183,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     notification.defaults = 0; // please be quiet
                     notification.sound = null;
                     notification.vibrate = null;
-                    notification.setLatestEventInfo(getUiContext(), text,
+                    notification.setLatestEventInfo(context, text,
                             mContext.getText(R.string.heavy_weight_notification_detail),
                             PendingIntent.getActivityAsUser(mContext, 0, root.intent,
                                     PendingIntent.FLAG_CANCEL_CURRENT, null,
@@ -1803,15 +1797,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }
     }
-
-	private Context getUiContext() {
-		synchronized (this) {
-		if (mUiContext == null && mBooted) {
-			mUiContext = ThemeUtils.createUiContext(mContext);
-		}
-		return mUiContext != null ? mUiContext : mContext;
-		}
-	}
 
     /**
      * Initialize the application bind args. These are passed to each
@@ -3421,7 +3406,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 @Override
                 public void run() {
                     synchronized (ActivityManagerService.this) {
-                        final Dialog d = new LaunchWarningWindow(getUiContext(), cur, next);
+                        final Dialog d = new LaunchWarningWindow(mContext, cur, next);
                         d.show();
                         mHandler.postDelayed(new Runnable() {
                             @Override
@@ -3884,7 +3869,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
 
         boolean didSomething = killPackageProcessesLocked(name, appId, userId,
-                -100, callerWillRestart, false, doit, evenPersistent,
+                -100, callerWillRestart, true, doit, evenPersistent,
                 name == null ? ("force stop user " + userId) : ("force stop " + name));
         
         TaskRecord lastTask = null;
@@ -4404,13 +4389,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }, pkgFilter);
 
-		ThemeUtils.registerThemeChangeReceiver(mContext, new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				mUiContext = null;
-			}
-		});
-
         synchronized (this) {
             // Ensure that any processes we had put on hold are now started
             // up.
@@ -4783,6 +4761,18 @@ public final class ActivityManagerService extends ActivityManagerNative
         } catch (ClassCastException e) {
         }
         return false;
+    }
+
+    public Intent getIntentForIntentSender(IIntentSender pendingResult) {
+        if (!(pendingResult instanceof PendingIntentRecord)) {
+            return null;
+        }
+        try {
+            PendingIntentRecord res = (PendingIntentRecord)pendingResult;
+            return res.key.requestIntent != null ? new Intent(res.key.requestIntent) : null;
+        } catch (ClassCastException e) {
+        }
+        return null;
     }
 
     public void setProcessLimit(int max) {
@@ -7944,7 +7934,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                             }
                         }, 0, null, null,
                         android.Manifest.permission.INTERACT_ACROSS_USERS,
-                        false, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
+                        true, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
             } finally {
                 Binder.restoreCallingIdentity(ident);
             }
@@ -12331,18 +12321,13 @@ public final class ActivityManagerService extends ActivityManagerNative
                                      values.userSetLocale);
                 }
 
-				if (values.customTheme != null) {
-					saveThemeResourceLocked(values.customTheme,
-					!values.customTheme.equals(mConfiguration.customTheme));
-				}
-
                 mConfigurationSeq++;
                 if (mConfigurationSeq <= 0) {
                     mConfigurationSeq = 1;
                 }
                 newConfig.seq = mConfigurationSeq;
                 mConfiguration = newConfig;
-                Slog.i(TAG, "Config changed: " + newConfig);
+                Slog.i(TAG, "Config changes=" + Integer.toHexString(changes) + " " + newConfig);
 
                 final Configuration configCopy = new Configuration(mConfiguration);
                 
@@ -12554,13 +12539,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
         return srec.launchedFromUid;
     }
-
-	private void saveThemeResourceLocked(CustomTheme t, boolean isDiff){
-		if(isDiff){
-			SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, t.getThemeId());
-			SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getThemePackageName());  
-		}
-	}
 
     // =========================================================
     // LIFETIME MANAGEMENT
@@ -14153,7 +14131,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     // Multi-user methods
 
     @Override
-    public boolean switchUser(int userId) {
+    public boolean switchUser(final int userId) {
         if (checkCallingPermission(android.Manifest.permission.INTERACT_ACROSS_USERS_FULL)
                 != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: switchUser() from pid="
@@ -14201,7 +14179,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                 // Once the internal notion of the active user has switched, we lock the device
                 // with the option to show the user switcher on the keyguard.
-                mWindowManager.lockNow(LockPatternUtils.USER_SWITCH_LOCK_OPTIONS);
+                mWindowManager.lockNow(null);
 
                 final UserStartedState uss = mStartedUsers.get(userId);
 
@@ -14247,7 +14225,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                                     public void performReceive(Intent intent, int resultCode,
                                             String data, Bundle extras, boolean ordered,
                                             boolean sticky, int sendingUser) {
-                                        userInitialized(uss);
+                                        userInitialized(uss, userId);
                                     }
                                 }, 0, null, null, null, true, false, MY_PID, Process.SYSTEM_UID,
                                 userId);
@@ -14262,6 +14240,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     startHomeActivityLocked(userId);
                 }
 
+                EventLogTags.writeAmSwitchUser(userId);
                 getUserManagerLocked().userForeground(userId);
                 sendUserSwitchBroadcastsLocked(oldUserId, userId);
                 if (needStart) {
@@ -14277,7 +14256,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                                 }
                             }, 0, null, null,
                             android.Manifest.permission.INTERACT_ACROSS_USERS,
-                            false, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
+                            true, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
                 }
             }
         } finally {
@@ -14373,32 +14352,39 @@ public final class ActivityManagerService extends ActivityManagerNative
                 oldUserId, newUserId, uss));
     }
 
-    void userInitialized(UserStartedState uss) {
-        synchronized (ActivityManagerService.this) {
-            getUserManagerLocked().makeInitialized(uss.mHandle.getIdentifier());
-            uss.initializing = false;
-            completeSwitchAndInitalizeLocked(uss);
-        }
+    void userInitialized(UserStartedState uss, int newUserId) {
+        completeSwitchAndInitalize(uss, newUserId, true, false);
     }
 
     void continueUserSwitch(UserStartedState uss, int oldUserId, int newUserId) {
-        final int N = mUserSwitchObservers.beginBroadcast();
-        for (int i=0; i<N; i++) {
-            try {
-                mUserSwitchObservers.getBroadcastItem(i).onUserSwitchComplete(newUserId);
-            } catch (RemoteException e) {
-            }
-        }
-        mUserSwitchObservers.finishBroadcast();
-        synchronized (this) {
-            uss.switching = false;
-            completeSwitchAndInitalizeLocked(uss);
-        }
+        completeSwitchAndInitalize(uss, newUserId, false, true);
     }
 
-    void completeSwitchAndInitalizeLocked(UserStartedState uss) {
-        if (!uss.switching && !uss.initializing) {
-            mWindowManager.stopFreezingScreen();
+    void completeSwitchAndInitalize(UserStartedState uss, int newUserId,
+            boolean clearInitializing, boolean clearSwitching) {
+        boolean unfrozen = false;
+        synchronized (this) {
+            if (clearInitializing) {
+                uss.initializing = false;
+                getUserManagerLocked().makeInitialized(uss.mHandle.getIdentifier());
+            }
+            if (clearSwitching) {
+                uss.switching = false;
+            }
+            if (!uss.switching && !uss.initializing) {
+                mWindowManager.stopFreezingScreen();
+                unfrozen = true;
+            }
+        }
+        if (unfrozen) {
+            final int N = mUserSwitchObservers.beginBroadcast();
+            for (int i=0; i<N; i++) {
+                try {
+                    mUserSwitchObservers.getBroadcastItem(i).onUserSwitchComplete(newUserId);
+                } catch (RemoteException e) {
+                }
+            }
+            mUserSwitchObservers.finishBroadcast();
         }
     }
 
@@ -14500,7 +14486,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             long ident = Binder.clearCallingIdentity();
             try {
                 // We are going to broadcast ACTION_USER_STOPPING and then
-                // once that is down send a final ACTION_SHUTDOWN and then
+                // once that is done send a final ACTION_SHUTDOWN and then
                 // stop the user.
                 final Intent stoppingIntent = new Intent(Intent.ACTION_USER_STOPPING);
                 stoppingIntent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
@@ -14565,6 +14551,10 @@ public final class ActivityManagerService extends ActivityManagerNative
                 // Clean up all state and processes associated with the user.
                 // Kill all the processes for the user.
                 forceStopUserLocked(userId);
+                AttributeCache ac = AttributeCache.instance();
+                if (ac != null) {
+                    ac.removeUser(userId);
+                }
             }
         }
 

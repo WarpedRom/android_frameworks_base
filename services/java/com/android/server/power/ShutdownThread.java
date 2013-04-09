@@ -138,9 +138,9 @@ public final class ShutdownThread extends Thread {
 					public void onClick(DialogInterface dialog, int which) {
 						if (which < 0)
 							return;
-						
+
 						String actions[] = context.getResources().getStringArray(com.android.internal.R.array.shutdown_reboot_actions);
-						
+
 						if (actions != null && which < actions.length)
 							mRebootReason = actions[which];
 					}
@@ -185,7 +185,6 @@ public final class ShutdownThread extends Thread {
             sConfirmDialog.setOnDismissListener(closer);
             sConfirmDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
             sConfirmDialog.show();
-			
         } else {
             beginShutdownSequence(context);
         }

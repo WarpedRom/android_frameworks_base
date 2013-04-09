@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +19,6 @@ package android.app;
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.util.Preconditions;
 
-import android.accounts.AccountManager;
-import android.accounts.IAccountManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -29,9 +26,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.IContentProvider;
-import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IIntentReceiver;
 import android.content.IntentSender;
 import android.content.ReceiverCallNotAllowedException;
 import android.content.ServiceConnection;
@@ -43,7 +40,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
@@ -172,7 +168,7 @@ class ReceiverRestrictedContext extends ContextWrapper {
  * context object for Activity and other application components.
  */
 class ContextImpl extends Context {
-    private final static String TAG = "ApplicationContext";
+    private final static String TAG = "ContextImpl";
     private final static boolean DEBUG = false;
 
     private static final HashMap<String, SharedPreferencesImpl> sSharedPrefs =
@@ -558,26 +554,12 @@ class ContextImpl extends Context {
     @Override
     public AssetManager getAssets() {
         return getResources().getAssets();
-	}
+    }
 
     @Override
     public Resources getResources() {
         return mResources;
     }
-
-	/**
-	 * Refresh resources object which may have been changed by a theme
-	 * configuration change.
-	 */
-	/* package */ void refreshResourcesIfNecessary() {
-		if (mResources == Resources.getSystem()) {
-			return;
-		}
-
-		if (mPackageInfo.mCompatibilityInfo.get().isThemeable) {
-			mTheme = null;
-		}
-	}
 
     @Override
     public PackageManager getPackageManager() {
@@ -1733,7 +1715,7 @@ class ContextImpl extends Context {
     private void warnIfCallingFromSystemProcess() {
         if (Process.myUid() == Process.SYSTEM_UID) {
             Slog.w(TAG, "Calling a method in the system process without a qualified user: "
-                    + Debug.getCallers(3));
+                    + Debug.getCallers(5));
         }
     }
 

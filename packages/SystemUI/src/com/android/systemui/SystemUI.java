@@ -21,14 +21,11 @@ import java.io.PrintWriter;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.widget.FrameLayout;
 
 public abstract class SystemUI {
     public Context mContext;
 
     public abstract void start();
-	
-	public FrameLayout mStatusBarContainer;
     
     protected void onConfigurationChanged(Configuration newConfig) {
     }

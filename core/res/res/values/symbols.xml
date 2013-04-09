@@ -277,6 +277,7 @@
   <java-symbol type="bool" name="config_safe_media_volume_enabled" />
   <java-symbol type="bool" name="config_camera_sound_forced" />
   <java-symbol type="bool" name="config_dontPreferApn" />
+  <java-symbol type="bool" name="config_speed_up_audio_on_mt_calls" />
 
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_longPressOnPowerBehavior" />
@@ -870,6 +871,9 @@
   <java-symbol type="plurals" name="abbrev_num_hours_ago" />
   <java-symbol type="plurals" name="abbrev_num_minutes_ago" />
   <java-symbol type="plurals" name="abbrev_num_seconds_ago" />
+  <java-symbol type="plurals" name="duration_hours" />
+  <java-symbol type="plurals" name="duration_minutes" />
+  <java-symbol type="plurals" name="duration_seconds" />
   <java-symbol type="plurals" name="in_num_days" />
   <java-symbol type="plurals" name="in_num_hours" />
   <java-symbol type="plurals" name="in_num_minutes" />
@@ -1108,6 +1112,7 @@
   <java-symbol type="layout" name="keyguard_multi_user_selector_widget" />
   <java-symbol type="layout" name="sms_short_code_confirmation_dialog" />
   <java-symbol type="layout" name="keyguard_add_widget" />
+  <java-symbol type="layout" name="action_bar_up_container" />
 
   <java-symbol type="anim" name="slide_in_child_bottom" />
   <java-symbol type="anim" name="slide_in_right" />
@@ -1236,7 +1241,7 @@
   <java-symbol type="dimen" name="kg_widget_pager_horizontal_padding" />
   <java-symbol type="dimen" name="kg_widget_pager_top_padding" />
   <java-symbol type="dimen" name="kg_widget_pager_bottom_padding" />
-  <java-symbol type="dimen" name="lockscreen_target_inset" />
+  <java-symbol type="dimen" name="lockscreen_target_inset" /> 
   <java-symbol type="dimen" name="keyguard_avatar_size" />
   <java-symbol type="dimen" name="keyguard_avatar_frame_stroke_width" />
   <java-symbol type="dimen" name="keyguard_avatar_frame_shadow_radius" />
@@ -1250,9 +1255,9 @@
   <java-symbol type="drawable" name="ic_lock_airplane_mode" />
   <java-symbol type="drawable" name="ic_lock_airplane_mode_off" />
   <java-symbol type="drawable" name="ic_lockscreen_lock_pressed" />
-  <java-symbol type="drawable" name="ic_lockscreen_target_activated" />
-  <java-symbol type="drawable" name="ic_lockscreen_unlock_activated" />
-  <java-symbol type="drawable" name="ic_lockscreen_unlock_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_target_activated" /> 
+  <java-symbol type="drawable" name="ic_lockscreen_unlock_activated" /> 
+  <java-symbol type="drawable" name="ic_lockscreen_unlock_normal" /> 
   <java-symbol type="drawable" name="ic_menu_cc" />
   <java-symbol type="drawable" name="jog_tab_bar_left_unlock" />
   <java-symbol type="drawable" name="jog_tab_bar_right_sound_off" />
@@ -1821,9 +1826,4 @@
 
   <!-- From PinyinIME(!!!) -->
   <java-symbol type="string" name="inputMethod" />
-
-   <!-- Always show battery status on lockscreen -->
-  <java-symbol type="string" name="lockscreen_always_battery" />
-  <java-symbol type="string" name="lockscreen_always_low_battery" />
-
 </resources>

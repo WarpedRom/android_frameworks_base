@@ -16,13 +16,11 @@
 
 package com.android.internal.policy.impl.keyguard;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.View;
@@ -108,7 +106,6 @@ public class KeyguardStatusView extends GridLayout {
         mClockView.updateTime();
         refreshDate();
         refreshAlarmStatus(); // might as well
-	updateColors();
     }
 
     void refreshAlarmStatus() {
@@ -149,20 +146,6 @@ public class KeyguardStatusView extends GridLayout {
             textView.setText(text != null ? text.toString().toUpperCase() : null);
         } else {
             textView.setText(text);
-        }
-    }
-    
-    private void updateColors() {
-        ContentResolver resolver = getContext().getContentResolver();
-        int color = Settings.System.getInt(resolver,
-                Settings.System.LOCKSCREEN_CUSTOM_TEXT_COLOR, 0xFFFFFFFF);
-
-        if (mDateView != null) {
-            mDateView.setTextColor(color);
-        }
-
-        if (mAlarmStatusView != null) {
-            mAlarmStatusView.setTextColor(color);
         }
     }
 }

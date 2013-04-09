@@ -29,7 +29,6 @@
     <drawable name="notification_item_background_legacy_color">#ffaaaaaa</drawable>
     <drawable name="intruder_bg_pressed">#ff33B5E5</drawable>
     <drawable name="notification_header_bg">#FF000000</drawable>
-    <drawable name="nav_bar_bg">#ff000000</drawable>
     <drawable name="battery_text_color">#ff33b5e5</drawable>
     <drawable name="battery_text_plugged_color">#ff99cc00</drawable>
     <drawable name="battery_text_low_color">#ffff4444</drawable>

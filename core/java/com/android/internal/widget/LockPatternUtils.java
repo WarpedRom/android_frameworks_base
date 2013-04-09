@@ -54,8 +54,6 @@ import java.util.List;
  */
 public class LockPatternUtils {
 
-    private static final String OPTION_ENABLE_FACELOCK = "enable_facelock";
-
     private static final String TAG = "LockPatternUtils";
 
     /**
@@ -116,6 +114,12 @@ public class LockPatternUtils {
     public static final String KEYGUARD_SHOW_APPWIDGET = "showappwidget";
 
     /**
+     * The bit in LOCK_BIOMETRIC_WEAK_FLAGS to be used to indicate whether liveliness should
+     * be used
+     */
+    public static final int FLAG_BIOMETRIC_WEAK_LIVELINESS = 0x1;
+
+    /**
      * Options used to lock the device upon user switch.
      */
     public static final Bundle USER_SWITCH_LOCK_OPTIONS = new Bundle();
@@ -124,12 +128,6 @@ public class LockPatternUtils {
         USER_SWITCH_LOCK_OPTIONS.putBoolean(KEYGUARD_SHOW_USER_SWITCHER, true);
         USER_SWITCH_LOCK_OPTIONS.putBoolean(KEYGUARD_SHOW_SECURITY_CHALLENGE, true);
     }
-
-    /**
-     * The bit in LOCK_BIOMETRIC_WEAK_FLAGS to be used to indicate whether liveliness should
-     * be used
-     */
-    public static final int FLAG_BIOMETRIC_WEAK_LIVELINESS = 0x1;
 
     /**
      * Pseudo-appwidget id we use to represent the default clock status widget

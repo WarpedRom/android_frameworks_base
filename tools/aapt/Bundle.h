@@ -1,6 +1,5 @@
 //
 // Copyright 2006 The Android Open Source Project
-// This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, In
 //
 // State bundle.  Used to pass around stuff like command-line args.
 //
@@ -39,6 +38,7 @@ typedef enum Command {
     kCommandRemove,
     kCommandPackage,
     kCommandCrunch,
+    kCommandSingleCrunch,
 } Command;
 
 /*
@@ -49,7 +49,7 @@ public:
     Bundle(void)
         : mCmd(kCommandUnknown), mVerbose(false), mAndroidList(false),
           mForce(false), mGrayscaleTolerance(0), mMakePackageDirs(false),
-          mUpdate(false), mExtending(false), mExtendedPackageId(0),
+          mUpdate(false), mExtending(false),
           mRequireLocalization(false), mPseudolocalize(false),
           mWantUTF16(false), mValues(false),
           mCompressionMethod(0), mJunkPath(false), mOutputAPKFile(NULL),
@@ -63,6 +63,7 @@ public:
           mVersionCode(NULL), mVersionName(NULL), mCustomPackage(NULL), mExtraPackages(NULL),
           mMaxResVersion(NULL), mDebugMode(false), mNonConstantId(false), mProduct(NULL),
           mUseCrunchCache(false), mErrorOnFailedInsert(false), mOutputTextSymbols(NULL),
+          mSingleCrunchInputFile(NULL), mSingleCrunchOutputFile(NULL),
           mArgc(0), mArgv(NULL)
         {}
     ~Bundle(void) {}
@@ -91,8 +92,6 @@ public:
     void setUpdate(bool val) { mUpdate = val; }
     bool getExtending(void) const { return mExtending; }
     void setExtending(bool val) { mExtending = val; }
-	int getExtendedPackageId(void) const { return mExtendedPackageId; }
-	void setExtendedPackageId(int val) { mExtendedPackageId = val; }
     bool getRequireLocalization(void) const { return mRequireLocalization; }
     void setRequireLocalization(bool val) { mRequireLocalization = val; }
     bool getPseudolocalize(void) const { return mPseudolocalize; }
@@ -179,6 +178,10 @@ public:
     bool getUseCrunchCache() const { return mUseCrunchCache; }
     const char* getOutputTextSymbols() const { return mOutputTextSymbols; }
     void setOutputTextSymbols(const char* val) { mOutputTextSymbols = val; }
+    const char* getSingleCrunchInputFile() const { return mSingleCrunchInputFile; }
+    void setSingleCrunchInputFile(const char* val) { mSingleCrunchInputFile = val; }
+    const char* getSingleCrunchOutputFile() const { return mSingleCrunchOutputFile; }
+    void setSingleCrunchOutputFile(const char* val) { mSingleCrunchOutputFile = val; }
 
     /*
      * Set and get the file specification.
@@ -247,7 +250,6 @@ private:
     bool        mUpdate;
     bool        mExtending;
     bool        mRequireLocalization;
-	int         mExtendedPackageId;
     bool        mPseudolocalize;
     bool        mWantUTF16;
     bool        mValues;
@@ -287,6 +289,8 @@ private:
     bool        mUseCrunchCache;
     bool        mErrorOnFailedInsert;
     const char* mOutputTextSymbols;
+    const char* mSingleCrunchInputFile;
+    const char* mSingleCrunchOutputFile;
 
     /* file specification */
     int         mArgc;

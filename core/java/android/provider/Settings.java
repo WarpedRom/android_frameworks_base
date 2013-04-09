@@ -626,6 +626,21 @@ public final class Settings {
     public static final String ACTION_NFCSHARING_SETTINGS =
         "android.settings.NFCSHARING_SETTINGS";
 
+    /**
+     * Activity Action: Show Daydream settings.
+     * <p>
+     * In some cases, a matching Activity may not exist, so ensure you
+     * safeguard against this.
+     * <p>
+     * Input: Nothing.
+     * <p>
+     * Output: Nothing.
+     * @see android.service.dreams.DreamService
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_DREAM_SETTINGS = "android.settings.DREAM_SETTINGS";
+
     // End of Intent actions for Settings
 
     /**
@@ -1003,8 +1018,8 @@ public final class Settings {
         public static boolean putString(ContentResolver resolver, String name, String value) {
             return putStringForUser(resolver, name, value, UserHandle.myUserId());
         }
-		
-		/**
+
+	/**
          * @hide
          * Convenience function for updating a single settings value as a
          * boolean. This will either create a new entry in the table if the
@@ -1021,6 +1036,7 @@ public final class Settings {
         public static boolean putBoolean(ContentResolver cr, String name, boolean value) {
             return putString(cr, name, value ? "1" : "0");
         }		
+
 
         /** @hide */
         public static boolean putStringForUser(ContentResolver resolver, String name, String value,
@@ -1085,7 +1101,6 @@ public final class Settings {
                 return def;
             }
         }
-		
 
         /**
          * Convenience function for retrieving a single system settings value
@@ -1120,8 +1135,8 @@ public final class Settings {
                 throw new SettingNotFoundException(name);
             }
         }
-		
-		/**
+
+	/**
          * @hide
          * Convenience function for retrieving a single system settings value
          * as a boolean.  Note that internally setting values are always
@@ -2202,12 +2217,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_DISABLED = "lockscreen.disabled";
-		
-		/**
-		 * Stores the values for custom locksceen targets
-		 * @hide
-		 */
-		public static final String LOCKSCREEN_TARGETS = "lockscreen_targets";
+
+	/**
+	 * Stores the values for custom locksceen targets
+	 * @hide
+	 */
+	public static final String LOCKSCREEN_TARGETS = "lockscreen_targets";
 
         /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
@@ -2309,8 +2324,8 @@ public final class Settings {
          * @hide
          */
         public static final String POINTER_SPEED = "pointer_speed";
-		
-		/**
+
+			/**
          * @hide
          * Vibrate when expanding notifications
          * 0 - no vibrate
@@ -2370,6 +2385,8 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_BATTERY_BAR_COLOR = "statusbar_battery_bar_color";
+
+	public static final String STATUSBAR_BATTERY_BAR_COLORS = "statusbar_battery_bar_color2";
 	
 	/**
          * @hide
@@ -2466,48 +2483,6 @@ public final class Settings {
 	 */
 	public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
 
-	 /**
-	 * Whether to enable quiet hours.
-	 * @hide
-	 */
-        public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
-
-        /**
-	 * Sets when quiet hours starts. This is stored in minutes from the start of the day.
-	 * @hide
-	 */
-        public static final String QUIET_HOURS_START = "quiet_hours_start";
-
-        /**
-	 * Sets when quiet hours end. This is stored in minutes from the start of the day.
-	 * @hide
-	 */
-        public static final String QUIET_HOURS_END = "quiet_hours_end";
-
-        /**
-	 * Whether to remove the sound from outgoing notifications during quiet hours.
-	 * @hide
-	 */
-        public static final String QUIET_HOURS_NOTIFICATIONS = "quiet_hours_notifications";
-
-        /**
-	 * Whether to mute phone ringtones during quiet hours.
-	 * @hide
-	 */
-        public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
-
-        /**
-	 * Whether to disable vibrations during quiet hours.
-	 * @hide
-	 */
-        public static final String QUIET_HOURS_STILL = "quiet_hours_still";
-
-        /**
-	 * Whether to attempt to dim the LED color during quiet hours.
-	 * @hide
-	 */
-        public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
-
 	/**
          * Clock Actions 0 = single, 1 = long, 2 = double click
          *
@@ -2518,62 +2493,32 @@ public final class Settings {
 		"notification_clock_1",
 		"notification_clock_2",
         };
-		
-		/**
-		 * Change the icon style to one of the programmed options 
-		 * @hide
-		 */
-		public static final String NAVBAR_STYLE_ICON = "navbar_style_icon";
-		
-		/**
-		 * @hide
-		 */
-		public static final String NAVIGATION_BAR_TINT = "navbar_icon_color";
-		
-		/**
-		 * @hide
-		 */
-		public static final String NAVIGATION_BAR_GLOW_TINT = "navigation_bar_glow_tint";
-		
-		public static final String NAVIGATION_BAR_BUTTON_ALPHA = "navigation_bar_button_alpha";
-		
-		public static final String SYSTEMUI_NAVBAR_COLOR = "systemui_navbar_color";
 
-		public static final int SYSTEMUI_NAVBAR_COLOR_DEF = 0xFF000000;
-		
-		/**
-		 * [0] = how long to animate glow off
-		 * [1] = how long to animate glow on
-		 *
-		 * @hide
-		 */
-		public static final String[] NAVIGATION_BAR_GLOW_DURATION = new String[] {
-				"navigation_bar_glow_duration_off",
-				"navigation_bar_glow_duration_on"
-		};
-		
-	/**
-	 * Change height of the navigation bar
-	 *
-	 * @hide
-	 */
-	public static final String NAV_BUTTONS_HEIGHT = "nav_buttons_height";
-		
-	/**
-         * enabled and order of quick toggles
-         * 
-         * @hide
-         */
-	public static final String QUICK_TOGGLES = "quick_toggles";
-		
-	/**
-         * number of tiles per row in quick settings
-         *
-         * @hide
-         */
-	public static final String QUICK_TOGGLES_PER_ROW = "quick_toggles_per_row";
+	public static final String RECENT_KILL_ALL_BUTTON = "recent_kill_all_button";
 
-	 /**
+	
+    /**
+     * Setting to enable volume options.
+     *
+     * @hide
+     */
+    public static final String ENABLE_VOLUME_OPTIONS = "enable_volume_options";
+
+    public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
+
+    public static final String NOTIFICATION_LIGHT_ON = "notification_light_on";
+
+    public static final String NOTIFICATION_LIGHT_OFF = "notification_light_off";
+
+    public static final String NOTIFICATION_LIGHT_COLOR = "notification_light_color";
+
+    public static final String QUICK_TOGGLES = "quick_toggles";
+
+    public static final String TORCH_STATE = "torch_state";
+
+    public static final String QUICK_TOGGLES_PER_ROW = "quick_toggles_per_row";
+
+    /**
 	  * enable and disable fast toggle in settings
 	  *
 	  * @hide
@@ -2586,98 +2531,9 @@ public final class Settings {
 	  * @hide
 	  */
         public static final String CHOOSE_FASTTOGGLE_SIDE = "choose_fasttoggle_side";
-		
-		/**
-         * Setting to allow % on lockscreen always showing.
-         * @hide
-         */
-        public static final String LOCKSCREEN_BATTERY = "lockscreen_battery";
 
-	public static final String LOCKSCREEN_AUTO_ROTATE = "lockscreen_auto_rotate";
 
-	public static final String LOCKSCREEN_CUSTOM_TEXT_COLOR = "lockscreen_custom_text_color";
-		
-		/**
-         * Whether to use keyguard or homescreen widgets
-         * @hide
-         */
-        public static final String LOCKSCREEN_ALL_WIDGETS = "lockscreen_all_widgets";
-		
-		/**
-		 * Key to store Torch state.
-		 * @hide 
-		 */
-        public static final String TORCH_STATE = "torch_state";
-
-	public static final String RECENT_KILL_ALL_BUTTON = "recent_kill_all_button";
-		
-		/**
-		 * Whether the UI is in tablet UI
-		 * @hide
-		 */
-        public static final String TABLET_UI = "tablet_ui";
-
-		/**
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
-
-		/**
-         * @hide
-         */
-        public static final String MENU_LOCATION = "menu_location";
-		
-		/**
-         * @hide
-         */
-        public static final String MENU_VISIBILITY = "menu_visibility";
-		
-		/**
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_BUTTONS_QTY = "navigation_bar_buttons_qty";
-		
-		/**
-         * @hide
-         */
-        public static final String[] NAVIGATION_CUSTOM_ACTIVITIES = new String[] {
-		"navigation_custom_app_intent_0",
-		"navigation_custom_app_intent_1",
-		"navigation_custom_app_intent_2",
-		"navigation_custom_app_intent_3",
-		"navigation_custom_app_intent_4",
-		"navigation_custom_app_intent_5",
-		"navigation_custom_app_intent_6",
-        };
-		
         /**
-         * @hide
-         */
-        public static final String[] NAVIGATION_LONGPRESS_ACTIVITIES = new String[] {
-		"navigation_longpress_app_intent_0",
-		"navigation_longpress_app_intent_1",
-		"navigation_longpress_app_intent_2",
-		"navigation_longpress_app_intent_3",
-		"navigation_longpress_app_intent_4",
-		"navigation_longpress_app_intent_5",
-		"navigation_longpress_app_intent_6",
-        };
-		
-        /**
-         * @hide
-         */
-        public static final String[] NAVIGATION_CUSTOM_APP_ICONS = new String[] {
-		"navigation_custom_app_icon_0",
-		"navigation_custom_app_icon_1",
-		"navigation_custom_app_icon_2",
-		"navigation_custom_app_icon_3",
-		"navigation_custom_app_icon_4",
-		"navigation_custom_app_icon_5",
-		"navigation_custom_app_icon_6",
-        };
-	
-		
-		/**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -2974,26 +2830,6 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
-		
-		/**
-         * Setting to enable volume options.
-         *
-         * @hide
-         */
-        public static final String ENABLE_VOLUME_OPTIONS = "enable_volume_options";
-		
-        /**
-         * Setting to Link Ringtone and Notification.
-         *
-         * @hide
-         */
-        public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
-
-	public static final String NOTIFICATION_LIGHT_ON = "notification_light_on";
-	
-	public static final String NOTIFICATION_LIGHT_OFF = "notification_light_off";
-
-	public static final String NOTIFICATION_LIGHT_COLOR = "notification_light_color";
     }
 
     /**
@@ -3508,12 +3344,7 @@ public final class Settings {
          */
         public static final String BUGREPORT_IN_POWER_MENU = "bugreport_in_power_menu";
 
-	 /**
-	  * Whether to blink the LED when screen is on
-	  *
-	  * @hide
-	  */ 
-        public static final String LED_SCREEN_ON = "led_screen_on";
+	 public static final String LED_SCREEN_ON = "led_screen_on";
 
         /**
          * @deprecated Use {@link android.provider.Settings.Global#ADB_ENABLED} instead
@@ -4726,6 +4557,13 @@ public final class Settings {
         public static final String POWER_SOUNDS_ENABLED = "power_sounds_enabled";
 
         /**
+         * URI for the "wireless charging started" sound.
+         * @hide
+         */
+        public static final String WIRELESS_CHARGING_STARTED_SOUND =
+                "wireless_charging_started_sound";
+
+        /**
          * Whether we keep the device on while the device is plugged in.
          * Supported values are:
          * <ul>
@@ -4856,7 +4694,6 @@ public final class Settings {
         * 0 = only allow installing from Google Play
         */
        public static final String INSTALL_NON_MARKET_APPS = "install_non_market_apps";
-	
 
        /**
         * Whether mobile data connections are allowed by the user.  See
@@ -5759,6 +5596,12 @@ public final class Settings {
          * @hide
          */
         public static final String DOCK_AUDIO_MEDIA_ENABLED = "dock_audio_media_enabled";
+
+        /**
+         * Persisted safe headphone volume management state by AudioService
+         * @hide
+         */
+        public static final String AUDIO_SAFE_VOLUME_STATE = "audio_safe_volume_state";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

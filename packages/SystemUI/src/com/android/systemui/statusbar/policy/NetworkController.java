@@ -228,7 +228,7 @@ public class NetworkController extends BroadcastReceiver {
 
         // broadcasts
         IntentFilter filter = new IntentFilter();
-		filter.addAction("com.android.settings.warped.LABEL_CHANGED");
+	filter.addAction("com.android.settings.warped.LABEL_CHANGED");
         filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -398,10 +398,10 @@ public class NetworkController extends BroadcastReceiver {
                  action.equals(ConnectivityManager.INET_CONDITION_ACTION)) {
             updateConnectivity(intent);
             refreshViews();
-		} else if (action.equals("com.android.settings.warped.LABEL_CHANGED")) {
-			refreshViews();
         } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
             refreshViews();
+	} else if (action.equals("com.android.settings.warped.LABEL_CHANGED")) {
+			refreshViews();
         } else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
             updateAirplaneMode();
             refreshViews();
@@ -1004,9 +1004,8 @@ public class NetworkController extends BroadcastReceiver {
         String mobileLabel = "";
         int N;
         final boolean emergencyOnly = isEmergencyOnly();
-		final String customLabel = Settings.System.getString(mContext.getContentResolver(),
+	final String customLabel = Settings.System.getString(mContext.getContentResolver(),
 				Settings.System.CUSTOM_CARRIER_LABEL);
-
         if (!mHasMobileDataFeature) {
             mDataSignalIconId = mPhoneSignalIconId = 0;
             mQSPhoneSignalIconId = 0;
@@ -1161,11 +1160,11 @@ public class NetworkController extends BroadcastReceiver {
             }
         }
 
-		if (customLabel != null && customLabel.length() > 0) { 
-			combinedLabel = customLabel;  
-			mobileLabel = customLabel;
-			wifiLabel = customLabel; 
-		}
+	if (customLabel != null && customLabel.length() > 0) { 
+		combinedLabel = customLabel;  
+		mobileLabel = customLabel;
+		wifiLabel = customLabel; 
+	}
 
         if (DEBUG) {
             Slog.d(TAG, "refreshViews connected={"

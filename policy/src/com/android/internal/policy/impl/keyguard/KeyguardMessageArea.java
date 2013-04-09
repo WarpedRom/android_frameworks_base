@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.UserHandle;
@@ -40,7 +41,6 @@ import com.android.internal.R;
 class KeyguardMessageArea extends TextView {
     static final int CHARGING_ICON = 0; //R.drawable.ic_lock_idle_charging;
     static final int BATTERY_LOW_ICON = 0; //R.drawable.ic_lock_idle_low_battery;
-    static final int BATTERY_ICON = 0;
 
     static final int SECURITY_MESSAGE_DURATION = 5000;
     protected static final int FADE_DURATION = 750;
@@ -52,13 +52,11 @@ class KeyguardMessageArea extends TextView {
     boolean mShowingBouncer = false;
 
     // last known plugged in state
-    boolean mPluggedIn = false;
+    boolean mCharging = false;
 
     // last known battery level
     int mBatteryLevel = 100;
-    
-     // always show battery info
-     boolean mLockAlwaysBattery;
+
     KeyguardUpdateMonitor mUpdateMonitor;
 
     // Timeout before we reset the message to show charging/owner info
@@ -137,7 +135,8 @@ class KeyguardMessageArea extends TextView {
         @Override
         public void onRefreshBatteryInfo(KeyguardUpdateMonitor.BatteryStatus status) {
             mShowingBatteryInfo = status.isPluggedIn() || status.isBatteryLow();
-            mPluggedIn = status.isPluggedIn();
+            mCharging = status.status == BatteryManager.BATTERY_STATUS_CHARGING
+                     || status.status == BatteryManager.BATTERY_STATUS_FULL;
             mBatteryLevel = status.level;
             mBatteryCharged = status.isCharged();
             mBatteryIsLow = status.isBatteryLow();
@@ -163,10 +162,6 @@ class KeyguardMessageArea extends TextView {
         mHandler = new Handler(Looper.myLooper());
 
         mSeparator = getResources().getString(R.string.kg_text_message_separator);
-	mLockAlwaysBattery = Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.LOCKSCREEN_BATTERY, 0) == 1;
-        setTextColor(Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.LOCKSCREEN_CUSTOM_TEXT_COLOR, 0xFFFFFFFF));
 
         update();
     }
@@ -230,25 +225,18 @@ class KeyguardMessageArea extends TextView {
         CharSequence string = null;
         if (mShowingBatteryInfo && !mShowingMessage) {
             // Battery status
-            if (mPluggedIn) {
+            if (mCharging) {
                 // Charging, charged or waiting to charge.
-                string = getContext().getString(mBatteryCharged ?
-                        com.android.internal.R.string.lockscreen_charged
-                        :com.android.internal.R.string.lockscreen_plugged_in, mBatteryLevel);
+                string = getContext().getString(mBatteryCharged
+                        ? com.android.internal.R.string.lockscreen_charged
+                        : com.android.internal.R.string.lockscreen_plugged_in, mBatteryLevel);
                 icon.value = CHARGING_ICON;
             } else if (mBatteryIsLow) {
                 // Battery is low
                 string = getContext().getString(
                         com.android.internal.R.string.lockscreen_low_battery);
                 icon.value = BATTERY_LOW_ICON;
-		if (mLockAlwaysBattery) {
-                    string = getContext().getString(R.string.lockscreen_always_low_battery, mBatteryLevel);
-                    icon.value = BATTERY_LOW_ICON;
-                }
             }
-	} else if (mLockAlwaysBattery) {
-                string = getContext().getString(R.string.lockscreen_always_battery, mBatteryLevel);
-                icon.value = BATTERY_ICON;
         }
         return string;
     }

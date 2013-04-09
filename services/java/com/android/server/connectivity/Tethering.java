@@ -16,8 +16,6 @@
 
 package com.android.server.connectivity;
 
-import com.android.internal.app.ThemeUtils;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -76,7 +74,6 @@ import java.util.Set;
 public class Tethering extends INetworkManagementEventObserver.Stub {
 
     private Context mContext;
-	private Context mUiContext;
     private final static String TAG = "Tethering";
     private final static boolean DBG = true;
     private final static boolean VDBG = false;
@@ -160,13 +157,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         filter.addAction(UsbManager.ACTION_USB_STATE);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         mContext.registerReceiver(mStateReceiver, filter);
-		
-		ThemeUtils.registerThemeChangeReceiver(mContext, new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context content, Intent intent) {
-                mUiContext = null;
-            }
-        });
 
         filter = new IntentFilter();
         filter.addAction(Intent.ACTION_MEDIA_SHARED);
@@ -488,17 +478,10 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         mTetheredNotification.defaults &= ~Notification.DEFAULT_SOUND;
         mTetheredNotification.flags = Notification.FLAG_ONGOING_EVENT;
         mTetheredNotification.tickerText = title;
-        mTetheredNotification.setLatestEventInfo(getUiContext(), title, message, pi);
+        mTetheredNotification.setLatestEventInfo(mContext, title, message, pi);
 
         notificationManager.notifyAsUser(null, mTetheredNotification.icon,
                 mTetheredNotification, UserHandle.ALL);
-    }
-	
-	private Context getUiContext() {
-        if (mUiContext == null) {
-            mUiContext = ThemeUtils.createUiContext(mContext);
-        }
-        return mUiContext != null ? mUiContext : mContext;
     }
 
     private void clearTetheredNotification() {

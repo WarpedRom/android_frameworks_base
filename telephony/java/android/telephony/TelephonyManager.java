@@ -522,8 +522,8 @@ public class TelephonyManager {
     public String getNetworkCountryIso() {
         return SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ISO_COUNTRY);
     }
-	
-	/**
+
+    /**
      * @hide
      */
     public void toggle2G(boolean twoGees) {
@@ -532,7 +532,7 @@ public class TelephonyManager {
         } catch (RemoteException e) {
         }
     }
-	
+
     /**
      * @hide
      */

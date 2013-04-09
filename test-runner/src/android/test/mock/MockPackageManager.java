@@ -576,18 +576,7 @@ public class MockPackageManager extends PackageManager {
             throws NameNotFoundException {
         throw new UnsupportedOperationException();
     }
-	
-	/**
-     * @hide - to match hiding in superclass
-     */
-    @Override
-    public List<PackageInfo> getInstalledThemePackages() {
-        throw new UnsupportedOperationException();
-    }
-	
-    /**
-     * @hide
-     */
+
     @Override
     public void verifyPendingInstall(int id, int verificationCode) {
         throw new UnsupportedOperationException();
