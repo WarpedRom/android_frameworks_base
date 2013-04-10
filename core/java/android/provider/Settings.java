@@ -2428,6 +2428,53 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_BATTERY_BAR_ANIMATE = "statusbar_battery_bar_animate";
+
+	/**
+         * Whether to enable pie controls on expanded screen?
+         * The value is boolean (1 or 0).
+         * Default: 0
+         * @hide
+         */
+        public static final String PIE_CONTROLS = "pie_controls";
+
+        /**
+         * Display search button in pie?
+         * The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String PIE_SEARCH = "pie_search";
+
+        /**
+         * Locations of the pie in the screen.
+         * (1<<0) = LEFT
+         * (1<<1) = BOTTOM
+         * (1<<2) = RIGHT
+         * (1<<3) = TOP
+         * Default: BOTTOM
+         * @hide
+         */
+        public static final String PIE_GRAVITY = "pie_gravity";
+
+        /**
+         * Relative pie size (fraction)
+         * Default: 1.0f
+         * @hide
+         */
+        public static final String PIE_SIZE = "pie_size";
+
+        /**
+         * Expanded desktop on/off state
+         * @hide
+         */
+        public static final String EXPANDED_DESKTOP_STATE = "expanded_desktop_state";
+
+         /**
+         * Expanded desktop style (with status bar or without status bar)
+         * @hide
+         */
+        public static final String EXPANDED_DESKTOP_STYLE = "expanded_desktop_style";
+
+	public static final String POWER_MENU_EXPANDED_DESKTOP_ENABLED = "power_menu_expanded_desktop_enabled";
 		
         /**
          * use Alt Activity Resolver Grid (GB style)
@@ -2496,6 +2543,46 @@ public final class Settings {
 
 	public static final String RECENT_KILL_ALL_BUTTON = "recent_kill_all_button";
 
+	/**
+	* Change the icon style to one of the programmed options 
+	* @hide
+	*/
+	public static final String NAVBAR_STYLE_ICON = "navbar_style_icon";
+		
+	/**
+	 * @hide
+	 */
+		public static final String NAVIGATION_BAR_TINT = "navbar_icon_color";
+		
+		/**
+		 * @hide
+		 */
+		public static final String NAVIGATION_BAR_GLOW_TINT = "navigation_bar_glow_tint";
+		
+		public static final String NAVIGATION_BAR_BUTTON_ALPHA = "navigation_bar_button_alpha";
+		
+		public static final String SYSTEMUI_NAVBAR_COLOR = "systemui_navbar_color";
+
+		public static final int SYSTEMUI_NAVBAR_COLOR_DEF = 0xFF000000;
+		
+		/**
+		 * [0] = how long to animate glow off
+		 * [1] = how long to animate glow on
+		 *
+		 * @hide
+		 */
+		public static final String[] NAVIGATION_BAR_GLOW_DURATION = new String[] {
+				"navigation_bar_glow_duration_off",
+				"navigation_bar_glow_duration_on"
+		};
+		
+	/**
+	 * Change height of the navigation bar
+	 *
+	 * @hide
+	 */
+	public static final String NAV_BUTTONS_HEIGHT = "nav_buttons_height";
+
 	
     /**
      * Setting to enable volume options.
@@ -2531,6 +2618,67 @@ public final class Settings {
 	  * @hide
 	  */
         public static final String CHOOSE_FASTTOGGLE_SIDE = "choose_fasttoggle_side";
+
+	public static final String TABLET_UI = "tablet_ui";
+
+	/**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
+
+	/**
+         * @hide
+         */
+        public static final String MENU_LOCATION = "menu_location";
+		
+	/**
+         * @hide
+         */
+        public static final String MENU_VISIBILITY = "menu_visibility";
+		
+	/**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_BUTTONS_QTY = "navigation_bar_buttons_qty";
+		
+	/**
+         * @hide
+         */
+        public static final String[] NAVIGATION_CUSTOM_ACTIVITIES = new String[] {
+		"navigation_custom_app_intent_0",
+		"navigation_custom_app_intent_1",
+		"navigation_custom_app_intent_2",
+		"navigation_custom_app_intent_3",
+		"navigation_custom_app_intent_4",
+		"navigation_custom_app_intent_5",
+		"navigation_custom_app_intent_6",
+        };
+		
+        /**
+         * @hide
+         */
+        public static final String[] NAVIGATION_LONGPRESS_ACTIVITIES = new String[] {
+		"navigation_longpress_app_intent_0",
+		"navigation_longpress_app_intent_1",
+		"navigation_longpress_app_intent_2",
+		"navigation_longpress_app_intent_3",
+		"navigation_longpress_app_intent_4",
+		"navigation_longpress_app_intent_5",
+		"navigation_longpress_app_intent_6",
+        };
+		
+        /**
+         * @hide
+         */
+        public static final String[] NAVIGATION_CUSTOM_APP_ICONS = new String[] {
+		"navigation_custom_app_icon_0",
+		"navigation_custom_app_icon_1",
+		"navigation_custom_app_icon_2",
+		"navigation_custom_app_icon_3",
+		"navigation_custom_app_icon_4",
+		"navigation_custom_app_icon_5",
+		"navigation_custom_app_icon_6",
+        };
 
 
         /**

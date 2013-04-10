@@ -586,4 +586,14 @@
     <!-- Descriptive text of a running process: plural process, plural service. -->
     <string name="running_processes_item_description_p_p"><xliff:g id="numprocess">%1$d</xliff:g>
         processes and <xliff:g id="numservices">%2$d</xliff:g> services</string>
+
+     <!-- Battery status in pie controls -->
+    <string name="pie_battery_status_charging">Charging (<xliff:g id="percent">%d</xliff:g>%%)</string>
+    <string name="pie_battery_status_full">Charged</string>
+    <string name="pie_battery_status_discharging"><xliff:g id="percent">%d</xliff:g>%% remaining</string>
+
+    <!-- Phone status in pie controls -->
+    <string name="pie_phone_status_no_service">No service</string>
+    <string name="pie_phone_status_airplane_mode">Airplane mode on</string>
+    <string name="pie_phone_status_emergency_only">Emergency calls only</string>
 </resources>
