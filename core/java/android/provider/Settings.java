@@ -2400,6 +2400,10 @@ public final class Settings {
          */
         public static final String STATUSBAR_BATTERY_TEXT_PLUGGED_COLOR = "statusbar_battery_text_plugged_color";
 
+	/**
+	 * Settings for Customized Battery Text Color
+         * @hide
+         */
 	public static final int STATUSBAR_BATTERY_TEXT_COLOR_PLUGGED_DEF = 0xFF99CC00;
 
 	/**
@@ -2679,6 +2683,48 @@ public final class Settings {
 		"navigation_custom_app_icon_5",
 		"navigation_custom_app_icon_6",
         };
+
+	 /**
+	 * Whether to enable quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_ENABLED = "quiet_hours_enabled";
+
+        /**
+	 * Sets when quiet hours starts. This is stored in minutes from the start of the day.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_START = "quiet_hours_start";
+
+        /**
+	 * Sets when quiet hours end. This is stored in minutes from the start of the day.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_END = "quiet_hours_end";
+
+        /**
+	 * Whether to remove the sound from outgoing notifications during quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_NOTIFICATIONS = "quiet_hours_notifications";
+
+        /**
+	 * Whether to mute phone ringtones during quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_RINGER = "quiet_hours_ringer";
+
+        /**
+	 * Whether to disable vibrations during quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_STILL = "quiet_hours_still";
+
+        /**
+	 * Whether to attempt to dim the LED color during quiet hours.
+	 * @hide
+	 */
+        public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
 
         /**
