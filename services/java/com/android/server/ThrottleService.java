@@ -16,6 +16,8 @@
 
 package com.android.server;
 
+import com.android.internal.app.ThemeUtils;
+
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -80,6 +82,7 @@ public class ThrottleService extends IThrottleManager.Stub {
     private HandlerThread mThread;
 
     private Context mContext;
+    private Context mUiContext;
 
     private static final int INITIAL_POLL_DELAY_SEC = 90;
     private static final int TESTING_POLLING_PERIOD_SEC = 60 * 1;
@@ -338,6 +341,13 @@ public class ThrottleService extends IThrottleManager.Stub {
                     dispatchReset();
                 }
             }, new IntentFilter(ACTION_RESET));
+
+	ThemeUtils.registerThemeChangeReceiver(mContext, new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mUiContext = null;
+            }
+        });
 
         // use a new thread as we don't want to stall the system for file writes
         mThread = new HandlerThread(TAG);
@@ -685,11 +695,18 @@ public class ThrottleService extends IThrottleManager.Stub {
             }
             mThrottlingNotification.flags = flags;
             mThrottlingNotification.tickerText = title;
-            mThrottlingNotification.setLatestEventInfo(mContext, title, message, pi);
+            mThrottlingNotification.setLatestEventInfo(getUiContext(), title, message, pi);
 
             mNotificationManager.notifyAsUser(null, mThrottlingNotification.icon,
                     mThrottlingNotification, UserHandle.ALL);
         }
+
+	private Context getUiContext() {
+	    if (mUiContext == null) {
+		mUiContext = ThemeUtils.createUiContext(mContext);
+	    }
+	    return mUiContext != null ? mUiContext : mContext;
+	}
 
 
         private void clearThrottleAndNotification() {
