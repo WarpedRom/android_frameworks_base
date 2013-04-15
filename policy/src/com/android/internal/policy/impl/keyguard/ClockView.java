@@ -18,6 +18,7 @@ package com.android.internal.policy.impl.keyguard;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
@@ -214,6 +215,8 @@ public class ClockView extends RelativeLayout {
 
         CharSequence newTime = DateFormat.format(mFormat, mCalendar);
         mTimeView.setText(newTime);
+	mTimeView.setTextColor(Settings.System.getInt(getContext().getContentResolver(),
+		Settings.System.LOCKSCREEN_CUSTOM_TEXT_COLOR, 0xFFFFFFFF));
         mAmPm.setIsMorning(mCalendar.get(Calendar.AM_PM) == 0);
     }
 

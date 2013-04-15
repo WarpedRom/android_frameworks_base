@@ -24,7 +24,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:rowCount="7"
+    android:rowCount="3"
     android:id="@+id/root"
     android:clipChildren="false">
 

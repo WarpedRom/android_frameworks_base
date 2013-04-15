@@ -2595,19 +2595,60 @@ public final class Settings {
      */
     public static final String ENABLE_VOLUME_OPTIONS = "enable_volume_options";
 
+    /**
+     * Setting to unlink notification volumes
+     *
+     * @hide
+     */
     public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
+    /**
+     * Setting for light on time
+     *
+     * @hide
+     */
     public static final String NOTIFICATION_LIGHT_ON = "notification_light_on";
 
+    /**
+     * Setting for light off time
+     *
+     * @hide
+     */
     public static final String NOTIFICATION_LIGHT_OFF = "notification_light_off";
-
+    /**
+     * Setting to unlink notification volumes
+     *
+     * @hide
+     */
     public static final String NOTIFICATION_LIGHT_COLOR = "notification_light_color";
-
+    
+    /**
+     * Quick Settings (next3)
+     *
+     * @hide
+     */
     public static final String QUICK_TOGGLES = "quick_toggles";
-
+    
+   /**
+    * @hide
+    */
     public static final String TORCH_STATE = "torch_state";
-
+   
+   /**
+    * @hide
+    */
     public static final String QUICK_TOGGLES_PER_ROW = "quick_toggles_per_row";
+
+   /**
+    * @hide
+    */
+    public static final String LOCKSCREEN_AUTO_ROTATE = "lockscreen_auto_rotate";
+
+    public static final String LOCKSCREEN_CUSTOM_TEXT_COLOR = "lockscreen_custom_text_color";
+
+    public static final String LOCKSCREEN_BATTERY = "lockscreen_battery";
+
+    public static final String LOCKSCREEN_ALL_WIDGETS = "lockscreen_all_widgets";
 
     /**
 	  * enable and disable fast toggle in settings

@@ -31,7 +31,7 @@
     <!-- top: status -->
     <RelativeLayout
         android:layout_height="0dip"
-        android:layout_weight="0.42"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:gravity="center">
 
@@ -68,7 +68,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
-            android:layout_weight="0.58"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="bottom">
 
